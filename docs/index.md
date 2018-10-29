@@ -93,6 +93,10 @@ run the with `./BFS soc-orkut.mtx --with-header --src=0 --device=0 --verbose`:
 ![run-bfs](./assets/imgs/run-bfs-orkut-example.png)
 *Figure 1: BFS example*
 
+![path](./assets/imgs/hit.png)
+*Figure 2: the decision path of BFS for graph orkut*
+
+
 ## Why GSWTICH
 
 As GPUs provide higher parallelism and memory bandwidth than traditional CPUs, GPUs become a promising hardware to accelerate graph algorithms. Many recent works have explored the potential of using GPUs for data-intensive graph processing. Although the primary optimizations of these works are diverse, we notice that most of them are trying to find a 'one size fits all' solution. This leads to the mismatch and complication issues:
@@ -100,10 +104,10 @@ As GPUs provide higher parallelism and memory bandwidth than traditional CPUs, G
  **Mismatch**: Previous GPU-based graph frameworks may incur performance hits due to suboptimal strategies. Previous works accelerated graph primitives to run truly fast on some particular graphs or algorithms, however, their performance might fell dramatically when facing an unmatched situation. For example, Figure 2 shows that differents graph require different load-balance strategies. Figure 3 shows the performance loss if we only use push model in frontier expansion.
 
 ![LB](./assets/imgs/motivation_LB.png)
-*Figure 2: Best load-balance for different graph*
+*Figure 3: Best load-balance for different graph*
 
 ![loss](./assets/imgs/motivation_loss.png)
-*Figure 3: performance loss*
+*Figure 4: performance loss*
 
  **Complication**: Priori knowledge is required for users to make favorable decisions, especially from a mass of choices. A bulk synchronous parallel (BSP)-style graph application achieves its best performance only if correct strategies are chosen in every super-step. Unfortunately, the number of these performance-crucial strategies is very large, or worse yet, various combinations of these strategies form a huge tuning space. Data analysts should not spend their labor on wrestling with the tedious and complex performance tuning. Offloading the decision-making to a fully auto-tuning runtime could be a better choice.
 
