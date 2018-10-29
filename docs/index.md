@@ -180,11 +180,9 @@ In GSWITCH, We also implement the forward and backward phases. In the forward ph
 
 ## Performance
 
-<<<<<<< HEAD
-Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [Gunrock](https://github.com/gunrock/gunrock) on k40m.
-=======
-Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [Gunrock](https://github.com/gunrock/gunrock) on k40m. (P.S. Note that some graph below have the same names with the graph in other well-known dataset such as SNAP, but **THEY ARE DIFFERENT**.)
->>>>>>> 8a1a5c179ca66773df8872b87a0e81b3d101db32
+Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [Gunrock](https://github.com/gunrock/gunrock) on k40m,P100,and V100. (P.S. Note that some graph below have the same names with the graph in other well-known dataset such as SNAP, but **THEY ARE DIFFERENT**.)
+
+### K40m
 
 **DOBFS** (both without tuning parameters)
 
@@ -403,109 +401,6 @@ Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [G
 
 | **Dataset** | **Gunrock** | **GSWITCH** |
 | ------- | ------- | ------- |
-<<<<<<< HEAD
-|TSOPF_RS_b162_c3.mtx| 18.0490016937| 6.86499|
-|stat96v1.mtx| 216.727018356| 6.64478|
-|mri1.mtx| 11.1129283905| 4.85986|
-|pds-50.mtx| 103.451013565| 6.88965|
-|rail2586.mtx| 239.165067673| 10.636|
-|cage13.mtx| 174.88694191| 10.124|
-|tmt_unsym.mtx| 30.3120613098| 6.35498|
-|g7jac160.mtx| 11.4750862122| 5.61084|
-|g7jac160sc.mtx| 13.3528709412| 5.66187|
-|lp_osa_30.mtx| 33.5719585419| 7.96704|
-|shar_te2-b2.mtx| 280.174016953| 4.86694|
-|socfb-UConn91.mtx| 11.482000351| 5.71704|
-|tech-RL-caida.mtx| 18.2960033417| 7.20605|
-|thermomech_dM.mtx| 36.1630916595| 4.07983|
-|boyd2.mtx| 72.9038715363| 9.21606|
-|nemeth22.mtx| 14.3570899963| 3.85815|
-|bibd_17_8.mtx| 21.6190814972| 8.66382|
-|ch7-8-b4.mtx| 10.4200839996| 4.73486|
-|bcsstk35.mtx| 9.99593734741| 4.50024|
-|soc-twitter-follows.mtx| 113.15202713| 14.2861|
-|frb53-24-4.mtx| 8.22496414185| 3.48315|
-|TSOPF_RS_b2052_c1.mtx| 13.6208534241| 4.45117|
-|pds-60.mtx| 127.330064774| 9.07812|
-|rgg_n_2_17_s0.mtx| 15.4240131378| 5.48706|
-|net75.mtx| 12.4769210815| 5.69189|
-|torso3.mtx| 101.810932159| 8.80981|
-|nemeth23.mtx| 11.8088722229| 3.96704|
-|ASIC_320ks.mtx| 59.8199367523| 12.2229|
-|Lin.mtx| 36.6859436035| 3.82715|
-|d_pretok.mtx| 10.1749897003| 4.26782|
-|NotreDame_www.mtx| 143.15199852| 11.5669|
-|delaunay_n18.mtx| 43.7529087067| 5.62207|
-|language.mtx| 176.179885864| 12.2258|
-|qa8fm.mtx| 14.3330097198| 5.09497|
-|rajat24.mtx| 103.203058243| 13.6133|
-|shar_te2-b3.mtx| 14.6470069885| 4.72095|
-|dblp-2010.mtx| 108.412981033| 10.261|
-|mk13-b5.mtx| 63.9169216156| 4.7561|
-|ca-MathSciNet.mtx| 210.743188858| 11.365|
-|ASIC_680ks.mtx| 77.1999359131| 16.999|
-|sgpf5y6.mtx| 84.9740505219| 6.71094|
-|pds-70.mtx| 144.984006882| 11.5608|
-|cfd1.mtx| 14.0058994293| 5.08398|
-|rajat29.mtx| 166.009902954| 13.1931|
-|rajat21.mtx| 115.41891098| 17.186|
-|pds-80.mtx| 161.581993103| 12.946|
-|darcy003.mtx| 65.4871463776| 6.604|
-|mario002.mtx| 68.2969093323| 6.68091|
-|coAuthorsDBLP.mtx| 45.9468364716| 13.3999|
-|TSOPF_FS_b39_c19.mtx| 20.6639766693| 9.30396|
-|TSOPF_RS_b39_c30.mtx| 18.2340145111| 8.74121|
-|kneser_10_4_1.mtx| 68.2787895203| 10.6121|
-|c-big.mtx| 276.998996735| 11.0061|
-|TSC_OPF_1047.mtx| 14.1758918762| 6.59497|
-|atmosmodd.mtx| 49.9241352081| 9.90601|
-|atmosmodj.mtx| 57.893037796| 9.85913|
-|pds-90.mtx| 177.029132843| 13.6619|
-|neos.mtx| 580.847024918| 15.231|
-|frb59-26-2.mtx| 18.6479091644| 5.11597|
-|watson_1.mtx| 106.513023376| 8.63013|
-|dbic1.mtx| 22.0100879669| 10.3501|
-|pds-100.mtx| 190.760850906| 14.8591|
-|Freescale1.mtx| 554.043054581| 22.7871|
-|socfb-MSU24.mtx| 22.9361057281| 9.48999|
-|connectus.mtx| 503.82900238| 21.9451|
-|dbir2.mtx| 20.4219818115| 8.64917|
-|EternityII_Etilde.mtx| 24.3628025055| 12.041|
-|helm2d03.mtx| 59.7171783447| 7.04907|
-|ins2.mtx| 44.8639392853| 14.7031|
-|filter3D.mtx| 18.2199478149| 8.46704|
-|Maragal_8.mtx| 20.3499794006| 9.64014|
-|thermal2.mtx| 94.3360328674| 10.2351|
-|soc-delicious.mtx| 479.265928268| 18.9089|
-|flickr.mtx| 320.264101028| 25.2761|
-|circuit5M.mtx| 662.358999252| 51.1821|
-|nlpkkt120.mtx| 543.653011322| 14.748|
-|Si41Ge41H72.mtx| 22.9659080505| 10.636|
-|cfd2.mtx| 17.5790786743| 7.42603|
-|pkustk03.mtx| 17.9071426392| 8.38794|
-|inf-roadNet-PA.mtx| 101.7100811| 11.0771|
-|roadNet-PA.mtx| 113.131999969| 11.7312|
-|ljournal-2008.mtx| 1490.26417732| 76.74|
-|inf-belgium_osm.mtx| 117.704153061| 13.3689|
-|belgium_osm.mtx| 109.932899475| 13.3809|
-|delaunay_n19.mtx| 83.4739208221| 10.5691|
-|mc2depi.mtx| 72.3390579224| 7.10791|
-|parabolic_fem.mtx| 88.7501239777| |
-|tmt_sym.mtx| 101.417064667| 10.165|
-|rt-retweet-crawl.mtx| 416.715860367| 55.437|
-|patents.mtx| 527.582883835| 60.0229|
-|s3dkq4m2.mtx| 20.1921463013| 8.69092|
-|GL7d19.mtx| 897.901058197| 33.627|
-|inf-netherlands_osm.mtx| 179.325819016| 19.7581|
-|netherlands_osm.mtx| 176.903009415| 19.7109|
-|ch7-9-b5.mtx| 32.8171253204| 12.897|
-|in-2004.mtx| 1210.91604233| 32.0803|
-|af_0_k101.mtx| 27.3959636688| 10.8621|
-|inf-roadNet-CA.mtx| 179.8350811| 20.731|
-|roadNet-CA.mtx| 198.958158493| 21.1289|
-|stat96v2.mtx| 1004.95910645| 20.063|
-|inf-great-britain_osm.mtx| 603.06096077| 75.6418|
-=======
 |3D_51448_3D.mtx| 11.2380981445| 4.72192|
 |g7jac140.mtx| 12.6740932465| 5.61499|
 |hamming10-2.mtx| 10.3750228882| 3.84302|
@@ -607,115 +502,11 @@ Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [G
 |ecology1.mtx| 98.906993866| 13.8862|
 |webbase-1M.mtx| 560.477018356| 30.0222|
 |apache2.mtx| 93.6460494995| 13.0732|
->>>>>>> 8a1a5c179ca66773df8872b87a0e81b3d101db32
 
 **SSSP** (Both enable stepping)
 
 | **Dataset** | **Gunrock** | **GSWITCH** |
 | ------- | ------- | ------- |
-<<<<<<< HEAD
-|cit-Patents.mtx| 0.61297416687| 0.296143|
-|flickr.mtx| 0.49901008606| 0.227051|
-|hood.mtx| 0.491857528687| 0.200195|
-|TSOPF_RS_b678_c2.mtx| 9.03296470642| 3.14893|
-|TSOPF_RS_b300_c3.mtx| 17.4260139465| 6.69507|
-|para-10.mtx| 1.87206268311| 0.871094|
-|para-9.mtx| 2.05898284912| 0.865967|
-|bauru5727.mtx| 15.6869888306| 5.93701|
-|cavity17.mtx| 45.8748321533| 7.34717|
-|g7jac040.mtx| 7.9870223999| 3.85498|
-|g7jac040sc.mtx| 8.21304321289| 3.87402|
-|Kemelmacher.mtx| 4.13799285889| 2.06689|
-|graphics.mtx| 15.5980587006| 2.50586|
-|c-61.mtx| 5.62405586243| 2.41309|
-|s3rmq4m1.mtx| 14.5819187164| 7.23828|
-|c-56.mtx| 12.2361183167| 3.80127|
-|ncvxqp5.mtx| 8.85891914368| 4.37598|
-|helm3d01.mtx| 13.8421058655| 4.48218|
-|onetone2.mtx| 9.84501838684| 4.58691|
-|graham1.mtx| 12.6340389252| 4.50195|
-|jan99jac120.mtx| 11.2280845642| 4.77783|
-|jan99jac120sc.mtx| 10.9870433807| 4.44604|
-|c-59.mtx| 8.84795188904| 4.17773|
-|inlet.mtx| 134.886032104| 32.686|
-|ex40.mtx| 35.7789993286| 13.4719|
-|c-67.mtx| 18.7311172485| 6.26392|
-|deltaX.mtx| 20.9989547729| 3.11621|
-|c-68.mtx| 21.7459201813| 5.76807|
-|c-62ghs.mtx| 8.26597213745| 3.33008|
-|c-62.mtx| 6.92200660706| 3.42603|
-|mark3jac120.mtx| 20.9710597992| 6.19312|
-|mark3jac120sc.mtx| 20.5562114716| 7.08105|
-|bayer01.mtx| 8.05902481079| 3.98608|
-|c-69.mtx| 15.9959793091| 5.66406|
-|c-70.mtx| 28.1360149384| 3.42993|
-|EAT_RS.mtx| 8.63790512085| 3.85083|
-|lhr14.mtx| 9.21010971069| 3.84009|
-|lhr14c.mtx| 9.21010971069| 3.7981|
-|c-72.mtx| 14.356136322| 4.77393|
-|mark3jac140sc.mtx| 21.8830108643| 9.43018|
-|email-EuAll.mtx| 18.7590122223| 7.89795|
-|heart2.mtx| 13.9570236206| 3.94019|
-|RFdevice.mtx| 8.47601890564| 3.86182|
-|dc2.mtx| 18.0118083954| 4.38306|
-|lhr17.mtx| 9.22608375549| 4.40601|
-|lhr17c.mtx| 9.31310653687| 4.41284|
-|c-71.mtx| 19.1378593445| 6.48193|
-|nemeth19.mtx| 87.0599746704| 39.884|
-|fe_ocean.mtx| 52.4818878174| 25.6802|
-|cit-HepPh.mtx| 10.3721618652| 4.87988|
-|g7jac120sc.mtx| 11.6939544678| 5.72217|
-|fe-tooth.mtx| 23.0369567871| 9.4939|
-|fe_tooth.mtx| 22.8610038757| 8.06299|
-|2D_54019_highK.mtx| 34.0430755615| 15.6091|
-|crystk02.mtx| 24.3580341339| 11.4951|
-|nemeth20.mtx| 75.2360839844| 35.6379|
-|Dubcova2.mtx| 38.459777832| 15.3059|
-|3Dspectralwave2.mtx| 25.2449512482| 5.80688|
-|case39.mtx| 16.0081386566| 5.13086|
-|c-73.mtx| 22.5808620453| 6.54102|
-|frb50-23-1.mtx| 7.50207901001| 1.96704|
-|bas1lp.mtx| 20.1640129089| 5.71997|
-|g7jac160sc.mtx| 14.3370628357| 7.0332|
-|boyd2.mtx| 34.9929351807| 9.61084|
-|pli.mtx| 17.2460079193| 7.62915|
-|TSOPF_RS_b39_c19.mtx| 20.1978683472| 5.20801|
-|soc-twitter-follows.mtx| 49.0310211182| 8.09424|
-|d_pretok.mtx| 97.1269607544| 35.042|
-|lhr34.mtx| 17.8279876709| 8.32104|
-|lhr34c.mtx| 18.826007843| 8.38403|
-|turon_m.mtx| 51.9452095032| 24.2903|
-|CO.mtx| 14.4340991974| 6.50903|
-|language.mtx| 28.7320613861| 13.7739|
-|crystk03.mtx| 33.9639205933| 15.5039|
-|pcrystk03.mtx| 31.672000885| 15.719|
-|appu.mtx| 11.3160610199| 4.93506|
-|net100.mtx| 13.2060050964| 6.12695|
-|TSC_OPF_1047.mtx| 25.377035141| 12.051|
-|bcsstk30.mtx| 48.3429412842| 19.9919|
-|af_shell2.mtx| 63.159942627| 28.8979|
-|matrix_9.mtx| 39.1020774841| 19.52|
-|conf5_4-8x8-05.mtx| 45.0170059204| 6.5769|
-|conf5_4-8x8-10.mtx| 38.7840270996| 6.61011|
-|conf5_4-8x8-15.mtx| 15.22397992649
-|cop20k_A.mtx| 57.6269607544| 21.8472|
-|ct20stif.mtx| 25.7580280304| 9.5271|
-|pct20stif.mtx| 21.7549800873| 9.5791|
-|TSOPF_RS_b300_c1.mtx| 20.7121372223| 7.78516|
-|Si41Ge41H72.mtx| 30.7250022888| 9.79419|
-|lhr71c.mtx| 30.7109355927| 13.02|
-|misc-IMDB-bi.mtx| 89.3509368896| 38.4119|
-|shipsec1.mtx| 92.6818847656| 29.637|
-|ship_003.mtx| 85.8499984741| 21.824|
-|C4000-5.mtx| 6.24012947083| 3.0022|
-|TF19.mtx| 164.703842163| 17.6069|
-|soc-lastfm.mtx| 52.2429962158| 25.9309|
-|keller6.mtx| 8.89897346497| 3.23901|
-|gupta3.mtx| 84.6161804199| 5.35791|
-|LargeRegFile.mtx| 103.537078857| 41.3821|
-|MANN-a81.mtx| 10.38813591| 3.51196|
-|fcondp2.mtx| 134.875061035| 36.0898|
-=======
 |para-6.mtx| 1.99699401855| 0.929932|
 |para-9.mtx| 2.05898284912| 1.01611|
 |hvdc1.mtx| 7.55000114441| 3.28394|
@@ -817,115 +608,11 @@ Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [G
 |ct20stif.mtx| 25.7580280304| 9.23901|
 |pct20stif.mtx| 21.7549800873| 9.0769|
 |socfb-Penn94.mtx| 12.9871368408| 6.48999|
->>>>>>> 8a1a5c179ca66773df8872b87a0e81b3d101db32
 
 **BC** 
 
 | **Dataset** | **Gunrock** | **GSWITCH** |
 | ------- | ------- | ------- |
-<<<<<<< HEAD
-|pds-50.mtx| 8.14986228943| 3.4040527|
-|tmt_unsym.mtx| 270.241973877| 11.4245602|
-|g7jac160.mtx| 29.0489196777| 3.2656255|
-|lp_osa_30.mtx| 5.450963974| 2.1079103|
-|socfb-UConn.mtx| 28.5861492157| 1.6413573|
-|socfb-UConn91.mtx| 11.9259357452| 1.7492677|
-|tech-RL-caida.mtx| 18.9678668976| 7.6091283|
-|socfb-Mississippi66.mtx| 6.03199005127| 1.4250493|
-|TSOPF_RS_b39_c19.mtx| 4.78196144104| 1.4824217|
-|socfb-BU10.mtx| 18.3501243591| 1.9304203|
-|SiO.mtx| 18.1999206543| 2.9616698|
-|socfb-MU78.mtx| 32.1409683228| 1.549316|
-|Trec13.mtx| 4.96912002563| 1.6101066|
-|socfb-Baylor93.mtx| 9.31692123413| 1.6835938|
-|bibd_17_8.mtx| 5.17201423645| 0.8020015|
-|g7jac180.mtx| 10.5950832367| 4.3583981|
-|socfb-UPenn7.mtx| 12.5470161438| 1.7268063|
-|nsct.mtx| 7.26008415222| 3.1926266|
-|socfb-Virginia63.mtx| 13.099193573| 1.7070315|
-|net75.mtx| 6.07895851135| 2.6540527|
-|ch7-8-b4.mtx| 7.75694847107| 2.2817385|
-|frb53-24-4.mtx| 3.2069683075| 0.8081057|
-|frb53-24-2.mtx| 3.32713127136| 0.9650874|
-|frb53-24-1.mtx| 2.56085395813| 0.9194331|
-|frb53-24-5.mtx| 2.30193138123| 0.8588867|
-|frb53-24-3.mtx| 6.68001174927| 0.8107911|
-|socfb-NYU9.mtx| 17.2910690308| 1.9907233|
-|TSOPF_RS_b2052_c1.mtx| 53.2391052246| 11.2834484|
-|pds-60.mtx| 7.84301757812| 3.8474142|
-|rgg_n_2_17_s0.mtx| 71.5861358643| 10.3571769|
-|n4c6-b6.mtx| 6.61706924438| 2.0969235|
-|socfb-Maryland58.mtx| 28.785943985| 1.632813|
-|socfb-UCLA.mtx| 5.82218170166| 1.5258786|
-|socfb-UCLA26.mtx| 6.05010986328| 1.5302734|
-|sparsine.mtx| 6.46591186523| 3.0734859|
-|d_pretok.mtx| 33.7789077759| 11.389649|
-|g7jac200sc.mtx| 14.6560668945| 3.9113774|
-|socfb-Tennessee95.mtx| 8.18705558777| 1.6110831|
-|turon_m.mtx| 27.8179645538| 12.4458006|
-|EternityII_A.mtx| 4.98008728027| 1.8535158|
-|socfb-Rutgers89.mtx| 5.31983375549| 1.8903808|
-|delaunay_n18.mtx| 39.7038459778| 10.2158225|
-|socfb-UVA16.mtx| 5.63883781433| 1.6901852|
-|socfb-Cornell5.mtx| 5.05304336548| 1.6030272|
-|shar_te2-b3.mtx| 6.42704963684| 2.6645517|
-|socfb-USC35.mtx| 5.84316253662| 1.8708499|
-|socfb-OR.mtx| 6.58321380615| 2.901123|
-|rel8.mtx| 26.0708332062| 2.629884|
-|socfb-Harvard1.mtx| 15.2611732483| 1.8867194|
-|fem_filter.mtx| 162.341125488| 14.0942362|
-|socfb-Wisconsin87.mtx| 14.2209529877| 1.7111815|
-|ch7-8-b5.mtx| 5.67102432251| 2.3725588|
-|p-hat1500-3.mtx| 2.38084793091| 0.849609|
-|socfb-Berkeley13.mtx| 6.04486465454| 1.6647956|
-|mesh_deform.mtx| 7.2181224823| 3.361816|
-|Ge87H76.mtx| 7.98797607422| 3.7377929|
-|cfd1.mtx| 27.3149013519| 13.3129885|
-|socfb-Oklahoma97.mtx| 4.18019294739| 2.0014655|
-|TSOPF_FS_b162_c3.mtx| 5.67984580994| 2.6992187|
-|nw14.mtx| 7.80200958252| 1.2404777|
-|HFE18_96_in.mtx| 5.20896911621| 2.2612304|
-|appu.mtx| 3.9598941803| 1.5866693|
-|darcy003.mtx| 130.2449646| 11.6601555|
-|mario002.mtx| 166.646957397| 9.5075698|
-|net100.mtx| 6.67405128479| 2.9848636|
-|sinc18.mtx| 6.3099861145| 3.0239253|
-|socfb-Auburn71.mtx| 8.47315788269| 1.6347658|
-|TSOPF_FS_b39_c19.mtx| 4.88996505737| 2.4443352|
-|bcsstk32.mtx| 45.5131530762| 13.562255|
-|TSOPF_RS_b39_c30.mtx| 4.59599494934| 1.8051761|
-|kneser_10_4_1.mtx| 10.3440284729| 4.0329596|
-|PR02R.mtx| 42.9649353027| 18.4633767|
-|C2000-5.mtx| 14.2478942871| 1.0229494|
-|TSC_OPF_1047.mtx| 10.0162029266| 3.7585445|
-|af_shell2.mtx| 43.2441253662| 19.0400384|
-|atmosmodd.mtx| 43.1821365356| 15.5644516|
-|atmosmodj.mtx| 43.1880950928| 13.2951666|
-|bcsstk39.mtx| 90.7027740479| 15.7062996|
-|sme3Db.mtx| 35.3689193726| 11.315434|
-|conf5_4-8x8-10.mtx| 30.2400588989| 6.3115216|
-|conf6_0-8x8-80.mtx| 18.1341171265| 6.325927|
-|IG5-17.mtx| 6.16693496704| 1.7958981|
-|socfb-FSU53.mtx| 19.3450450897| 1.7319334|
-|net4-1.mtx| 61.3079071045| 7.7956529|
-|frb59-26-4.mtx| 2.74205207825| 0.8793939|
-|frb59-26-1.mtx| 3.80611419678| 0.8747559|
-|frb59-26-2.mtx| 3.03888320923| 0.9064934|
-|frb59-26-3.mtx| 7.14683532715| 0.9677742|
-|frb59-26-5.mtx| 13.8750076294| 0.9099117|
-|H2O.mtx| 13.1080150604| 6.3862294|
-|dbir1.mtx| 7.01808929443| 3.357178|
-|msdoor.mtx| 86.7199859619| 19.8842792|
-|web-NotreDame.mtx| 37.8060340881| 8.5478518|
-|pwtk.mtx| 45.9430236816| 20.8737775|
-|pds-100.mtx| 10.7460021973| 4.5046397|
-|socfb-MSU24.mtx| 4.66394424438| 1.8752433|
-|connectus.mtx| 8.59689712524| 2.0234366|
-|exdata_1.mtx| 2.61497497559| 1.1223148|
-|ins2.mtx| 5.98192214966| 1.0473627|
-|std1_Jac2.mtx| 18.7201499939| 3.056396|
-|socfb-UIllinois.mtx| 17.0028209686| 1.8154303|
-=======
 |g7jac040.mtx| 18.385887146| 3.14819|
 |g7jac040sc.mtx| 18.0320739746| 3.09229|
 |graphics.mtx| 3.72290611267| 1.65112|
@@ -1027,7 +714,66 @@ Here we show 100 cases for each application (BFS,CC,PR,SSSP,BC) compared with [G
 |conf6_0-8x8-80.mtx| 18.1341171265| 6.35425|
 |socfb-FSU53.mtx| 19.3450450897| 3.05591|
 |net4-1.mtx| 61.3079071045| 12.9727|
->>>>>>> 8a1a5c179ca66773df8872b87a0e81b3d101db32
+
+### P100
+
+**DOBFS** (both without tuning parameters)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+
+**CC** (Both are edge-centric)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+
+**PageRank** (with the same threshold)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+
+**SSSP** (Both enable stepping)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+**BC** 
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+### V100
+
+**DOBFS** (both without tuning parameters)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+
+**CC** (Both are edge-centric)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+
+**PageRank** (with the same threshold)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+
+**SSSP** (Both enable stepping)
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
+**BC** 
+
+| **Dataset** | **Gunrock** | **GSWITCH** |
+| ------- | ------- | ------- |
+
 
 ## License
 All the libraryies, examples, and source codes of GSWITCH are released under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).
