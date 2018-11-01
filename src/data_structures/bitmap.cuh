@@ -152,6 +152,7 @@ struct bitmap_t{
 
   __device__ bool is_active(int v){return !active.query(v);}
   __device__ bool is_inactive(int v){return inactive.query(v);}
+  __device__ bool is_valid(int v){return is_active(v) || is_inactive(v);}
 
   // return ture if the v is not visited
   __device__ bool mark_duplicate_lite(int v){ return visited.query_and_mark(v);}

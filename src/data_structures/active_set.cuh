@@ -71,7 +71,7 @@ struct active_set_t{
 
   __device__ __tbdinline__
   int fetch_bitmap(int idx, Status wanted){
-    if(wanted == All) return idx;
+    if(wanted == All && (bitmap.is_active(idx) || bitmap.is_inactive(idx))) return idx;
     else if(wanted == Active && bitmap.is_active(idx)) return idx;
     else if(wanted == Inactive && bitmap.is_inactive(idx)) return idx;
     return -1;

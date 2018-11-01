@@ -164,12 +164,19 @@ struct inspector_t{
 
   template<typename G, typename F>
   void set_first_fets(active_set_t& as, G g, F &f, stat_t &stat, feature_t& fets, config_t conf, int nvertexs, int nedges){
-    fets.active_vertex = 1;
-    fets.unactive_vertex = nvertexs-1;
+    if(fets.use_root < 0){
+      fets.active_vertex = nvertexs;
+      fets.unactive_vertex = 0;
+      fets.push_workload = nedges;
+      fets.pull_workload = 0;
+    }else{
+      fets.active_vertex = 1;
+      fets.unactive_vertex = nvertexs-1;
+      fets.push_workload = fets.first_workload;
+      fets.pull_workload = nedges - fets.first_workload;
+    }
     fets.active_vertex_ratio   = (double)fets.active_vertex/nvertexs;
     fets.unactive_vertex_ratio = (double)fets.unactive_vertex/nvertexs;
-    fets.push_workload = fets.first_workload;
-    fets.pull_workload = nedges - fets.first_workload;
     fets.push_workload_ratio  = (double)fets.push_workload/nedges;
     fets.pull_workload_ratio  = (double)fets.pull_workload/nedges;
     fets.cur_avg_deg_active   = DIV(fets.push_workload, fets.active_vertex);

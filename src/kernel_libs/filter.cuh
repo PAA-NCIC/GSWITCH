@@ -22,6 +22,36 @@ __global__ void __copy_all(active_set_t as){
   if(!gtid) *Qproxy<M>::output_size(as.queue) = as.size;
 }
 
+template<QueueMode M>
+__global__ void __filter_unfixed(active_set_t as){
+  const int STRIDE  = blockDim.x*gridDim.x; 
+  const int gtid    = threadIdx.x + blockIdx.x*blockDim.x;
+  const int lane    = threadIdx.x&31;
+  const int n_bytes = as.bitmap.active.bytes_size(); 
+  const char* bits1 = (char*)(void*)as.bitmap.active.to_bytes(); 
+  const char* bits2 = (char*)(void*)as.bitmap.inactive.to_bytes(); 
+  int* base = Qproxy<M>::output_base(as.queue);
+  for(int idx=gtid; idx<n_bytes; idx+=STRIDE){
+    //if(idx>=as.size) break;
+    char active = bits1[idx]; 
+    char inactive = bits2[idx];
+    char unfixed = active | (~inactive);
+    int change  = popc(unfixed); 
+    int rank, sum=0;
+    warpScan(change, rank, sum);
+    int warp_base; 
+    if(!lane) 
+      warp_base = atomicAdd(Qproxy<M>::output_size(as.queue), sum);
+    warp_base = __shfl(warp_base, 0); 
+    if(active){ 
+      for(int i=0,c=0;i<8;++i) if(unfixed&((char)1<<i)){
+        base[warp_base+rank+(c++)] = (idx<<3)+i; 
+      } 
+    } 
+  } 
+}
+
+
 // filter the active vertex in to a compact array atomic enqueue with
 // aggregation.
 template<QueueMode M>
@@ -139,7 +169,8 @@ __host__ void __filter_atomic(active_set_t& as, config_t conf){
   } else if(conf.conf_target == Inactive) { 
     __filter_inactive<M><<<ctanum,thdnum>>>(as);
   }else{ 
-    __copy_all<M><<<ctanum,thdnum>>>(as); 
+    //__copy_all<M><<<ctanum,thdnum>>>(as); 
+    __filter_unfixed<M><<<ctanum,thdnum>>>(as);
   } 
 }
 
@@ -177,13 +208,14 @@ else __filter_##acc<Cached>(as, conf);                        \
     if(conf.conf_switch_to_fusion) { tofilter = true; conf.conf_switch_to_fusion = false; }
     if(conf.conf_first_round) { tofilter = true;}
 
-
     if(tofilter){
       if(as.queue.mode==Cached && as.queue.traceback){
         // do_noting
       }else{
-        //Launch_Filter(scan, as, conf); // for smaller active set (need two-phase copy)
-        Launch_Filter(atomic, as, conf); // for larger active set  (only copy once)
+        //if(fets.cap < 3.5)
+        //Launch_Filter(scan, as, conf); // for oldder architecture (need two-phase copy)
+        //else
+        Launch_Filter(atomic, as, conf); // for newer architecture  (only copy once)
       }
     }else{
       // mark duplicate in the expand phase

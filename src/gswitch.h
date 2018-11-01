@@ -19,6 +19,7 @@
 template<typename G, typename F>
 void init_conf(stat_t& stats, feature_t& fets, config_t& conf, G& g, F& f){
   stats.build();
+  fets.architecture_features();
   global_helper.build();
   conf.conf_inherit = false;
   if(fets.use_root >= 0) fets.first_workload = g.dg.get_degree(fets.use_root);

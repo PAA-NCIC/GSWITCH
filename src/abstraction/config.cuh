@@ -67,6 +67,7 @@ struct config_t{
 
   bool conf_fromall = false;
   bool conf_toall = false;
+  bool conf_fixed = false;
   bool conf_inherit = false; // used for all to all scheme, need reset
   bool conf_2d_partition = false;
 

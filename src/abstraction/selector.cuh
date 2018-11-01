@@ -150,21 +150,21 @@ struct selector_t{
     else v1.push_back(fets.fv[12]);
     if(select_fmt(v1)) conf.conf_asfmt = Bitmap;
     else conf.conf_asfmt = Queue;
-    if(fets.fromall && fets.toall) conf.conf_asfmt = Bitmap;
+    if(fets.fromall && fets.toall && !conf.conf_fixed) conf.conf_asfmt = Bitmap;
     if(cmd_opt.ins.has_asfmt) conf.conf_asfmt = cmd_opt.ins.asf;
 
     // step 3: selection for load-balance
     v1.clear();
     for(int i=0; i<7; ++i) v1.push_back(fets.fv[i]);
     if(conf.conf_dir == Pull){
-      if(conf.conf_fromall && conf.conf_toall){
+      if(conf.conf_fromall && conf.conf_toall && !conf.conf_fixed){
         l = select_lb_asso_backward_backup(v1);
       }else{
         for(int i=8; i<=18; i+=2) v1.push_back(fets.fv[i]);
         l = select_lb_asso_backward(v1);
       }
     } else{
-      if(conf.conf_fromall && conf.conf_toall){
+      if(conf.conf_fromall && conf.conf_toall && !conf.conf_fixed){
         l = select_lb_asso_backward_backup(v1);
       }else{
         for(int i=7; i<18; i+=2) v1.push_back(fets.fv[i]);
@@ -177,8 +177,6 @@ struct selector_t{
     else conf.conf_lb = STRICT;
     //if(conf.conf_dir==Push) if(fets.fromall && fets.toall) conf.conf_lb = WM;
     if(cmd_opt.ins.has_lb) conf.conf_lb = cmd_opt.ins.lb;
-
-    
   }
 
   void select_Mono(stat_t& stats, feature_t& fets, config_t &conf){
@@ -214,7 +212,7 @@ struct selector_t{
     }
 
     // the first time herer, conf.conf_toall and conf.conf_fromall are not set
-    if(conf.conf_toall && conf.conf_fromall){
+    if(conf.conf_toall && conf.conf_fromall && !conf.conf_fixed){
       conf.conf_inherit = true;
       return;
     }

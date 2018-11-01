@@ -60,6 +60,7 @@ struct feature_t{
       fv[16] += (active_vertex+unactive_vertex==0)? 0 : ((cur_avg_deg_active*active_vertex + cur_avg_deg_unactive*unactive_vertex)/(active_vertex+unactive_vertex));
       fv[18] = MAX(cur_max_deg_active, cur_max_deg_unactive);
     }
+
     active_vertex         = fv[7]; 
     unactive_vertex       = fv[8];
     push_workload         = fv[9]; 
@@ -94,8 +95,23 @@ struct feature_t{
     }
   }
 
+  void architecture_features(){
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, cmd_opt.device);
+    cap = prop.minor; while(cap>1) cap/=10;
+    cap += prop.major;
+    register_lim = prop.regsPerBlock/512;
+    thread_lim = prop.maxThreadsPerBlock;
+    sm_num = prop.multiProcessorCount;
+    //printf("  - capbility is %.2f\n", cap);
+    //printf("  - max threads per Block: %d\n", thread_lim);
+    //printf("  - max register per Block: %d\n", register_lim);
+    //printf("  - processor Count: %d\n", sm_num);
+    //printf("\n");
+  }
   // Device (K40)
   //int max_threads_num = 1024;
+
   // Algorithm 
   Centric centric;
   Computation pattern;
@@ -141,6 +157,12 @@ struct feature_t{
 
   double growing_rate;
   int first_workload=0;
+
+  // architecture 
+  double cap;
+  int thread_lim;
+  int register_lim;
+  int sm_num;
 
   double fv[21];
   json_t json;

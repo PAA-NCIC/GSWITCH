@@ -25,7 +25,7 @@ struct executor_t{
     __filter(as, g, f, conf);
 
     // specify grid size.
-    conf.thdnum = THDNUM_EXPAND;
+    conf.thdnum = THDNUM_EXPAND * (fets.register_lim/90);
     if(conf.conf_fuse_inspect) { 
       {conf.ctanum = 32; conf.thdnum=512;}
       //conf.thdnum=512;
@@ -40,6 +40,7 @@ struct executor_t{
       else conf.conf_idle = 0;
 
       if(conf.ctanum < 5 && conf.conf_lb == STRICT) conf.conf_lb=CM;
+      //if(conf.ctanum < fets.sm_num) conf.ctanum = fets.sm_num;
     }
 
     // vertex cannot update their data in the kernel fusion mode
