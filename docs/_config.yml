@@ -1,0 +1,6 @@
+title: GSWITCH
+logo: /assets/imgs/gswitch-icon.png
+description: A pattern-based algorithmic autotuner for graph processing on GPUs.
+show_downloads: true
+google_analytics:
+theme: jekyll-theme-minimal
