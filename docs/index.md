@@ -5,7 +5,7 @@ layout: homepage
 # GSWITCH
 GSWITCH is a pattern-based algorithmic autotuning system that dynamically switched to the suitable optimization variants with negligible overhead.
 Specifically, It is a CUDA library targeting the GPU-based graph applications, it supports both vertex-centric or edge-centric abstractions.
-By far, GSWITCH can automatically determine the suitable optimization variants in Direction (push, pull), data-structure (Bitmap, Queue), Load-Balance (TWC, WM, CM, STRICT, 2D-partition), Stepping (Increase, Decrease, Remain), and Kernel Fusion (Standalone, Fused).
+By far, GSWITCH can automatically determine the suitable optimization variants in Direction (push, pull), data-structure (Bitmap, Sorted Queue, Unsorted Queue), Load-Balance (TWC, WM, CM, STRICT, 2D-partition), Stepping (Increase, Decrease, Remain), and Kernel Fusion (Standalone, Fused).
 The fast optimization transition of GSWITCH is based on a machine learning model trained from 600+ real graphs from the [network repository](http://networkrepository.com).
 The model can be resued by new applications, or be retrained to adapt to new architectures.
 In addition, GSWITCH provides succinct programming interface which hides all low-level tuning details. Developers can implements their graph applications with high performance in just ~100 lines of code.
@@ -186,7 +186,7 @@ Besides the above five application, we will constantly updated other applictions
 
 **Graph Coloring**. Graph coloring partitions the vertices of a graph such that no two adjacent vertices share the same color. In most of cases, applications relying on this algorithm do not require the optimal coloring, such as Pannotia. Doing such coloring is among the first steps in many parallel graph algorithms. In the initialization step, each vertex is labeled with a random integer value. The algorithm then launches multiple iterations, each responsible for labeling one color. For each vertex, the algorithm compares its vertex value with that of its neighboring vertices. If the vertex value of a given node happens to be the largest (or smallest) among its neighbors it marks itself with the current iteration colors (one each for the largest and smallest in each set). The algorithm terminates when all vertices are colored.
 
-We implement the GC algorithm as vertex-centric in GSWITCH. We use the `filter` function to filter out the uncolored vertices as our active set, then we color the vertice whose local maximum vertex id collected in the last iteration is smaller then it's own vertex id. The `emit` function is used to send vertex id to each vertex's neighbors. The `comp` and `compAtomic` compute the max vertex id of each vertex. This naive implementation has many optimization such as multi-hash and min-max, which can make the algorithm converges faster.
+We implement the GC algorithm as vertex-centric in GSWITCH. We use the `filter` function to filter out the uncolored vertices as our active set, then we color the vertice whose local maximum vertex id collected in the last iteration is smaller then it's own vertex id. The `emit` function is used to send vertex id to each vertex's neighbors. The `comp` and `compAtomic` compute the max vertex id of each vertex's neighbors. This naive implementation has many optimization such as multi-hash and min-max, which can make the algorithm converges faster.
 
 ## Performance
 
