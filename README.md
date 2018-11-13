@@ -8,11 +8,7 @@
 # GSWITCH
 GSWITCH is a pattern-based algorithmic autotuning system that dynamically switched to the suitable optimization variants with negligible overhead.
 Specifically, It is a CUDA library targeting the GPU-based graph processing application, it supports both vertex-centric or edge-centric abstractions. 
-<<<<<<< HEAD
-By far, GSWITCH can automatically determine the suitable optimization variants in Direction (push, pull), data-structure (Bitmap, Queue), Load-Balance (TWC, WM, CM, STRICT, 2D-partition), Stepping (Increase, Decrease, Remain), Kernel Fusion(Standalone, Fused).
-=======
 By far, GSWITCH can automatically determine the suitable optimization variants in Direction (push, pull), data-structure (Bitmap, Sorted Queue, Unsorted Queue), Load-Balance (TWC, WM, CM, STRICT, 2D-partition), Stepping (Increase, Decrease, Remain), Kernel Fusion(Standalone, Fused).
->>>>>>> ec612072876b603c551c615247e79d5a0c2c4b4f
 The fast optimization transition of GSWITCH is based on a machine learning model trained from 600+ real graphs from the [network repository](http://networkrepository.com). 
 The model can be reused by news applications, or be retrained to adapt new architectures.
 In addition, GSWITCH provides succinct programming interface which hides all low-level tuning details. Developers can implements their graph application with high performance in just ~100 lines of code.
