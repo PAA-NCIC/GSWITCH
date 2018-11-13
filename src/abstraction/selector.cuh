@@ -136,7 +136,7 @@ struct selector_t{
     if(conf.conf_fromall && conf.conf_toall){
       v1.clear();
       for(int i=0; i<7; ++i) v1.push_back(fets.fv[i]);
-      fets.fv[1]/=2;
+      //fets.fv[1]/=2;
       int l;
       l = select_dir_asso_backup(v1);
       if(l) conf.conf_dir = Pull;
