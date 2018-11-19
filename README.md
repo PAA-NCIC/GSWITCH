@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="https://github.com/jokopi/GSWITCH"><img src="./docs/assets/imgs/gswitch-icon.png"></a>
+  <a href="https://github.com/PAA-NCIC/GSWITCH"><img src="./docs/assets/imgs/gswitch-icon.png"></a>
   <br>
-  <a href="https://github.com/jokopi/GSWITCH/releases/tag/v0.1.1"><img src="https://img.shields.io/badge/gswitch-0.1-blue.svg"></a>
+  <a href="https://github.com/PAA-NCIC/GSWITCH/releases/tag/v0.1.1"><img src="https://img.shields.io/badge/gswitch-0.1-blue.svg"></a>
   <br>
   <a href="https://zenodo.org/badge/latestdoi/153717996"><img src="https://zenodo.org/badge/153717996.svg" alt="DOI"></a>
   <br>
@@ -15,7 +15,7 @@ The fast optimization transition of GSWITCH is based on a machine learning model
 The model can be reused by news applications, or be retrained to adapt new architectures.
 In addition, GSWITCH provides succinct programming interface which hides all low-level tuning details. Developers can implements their graph application with high performance in just ~100 lines of code.
 
-For more details, please visit our [website](https://jokopi.github.io/GSWITCH/).
+For more details, please visit our [website](https://paa-ncic.github.io/GSWITCH/).
 
 ## Dependency
 
@@ -101,7 +101,7 @@ run the with `./BFS soc-orkut.mtx --with-header --src=0 --device=0 --verbose`:
 
 
 ## Performance
-please visit our [website](https://jokopi.github.io/GSWITCH/)
+please visit our [website](https://paa-ncic.github.io/GSWITCH/)
 
 ## License
 All the libraryies, examples, and source codes of GSWITCH are released under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).
