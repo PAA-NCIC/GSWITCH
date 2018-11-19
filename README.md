@@ -3,7 +3,7 @@
   <br>
   <a href="https://github.com/PAA-NCIC/GSWITCH/releases/tag/v0.1.1"><img src="https://img.shields.io/badge/gswitch-0.1-blue.svg"></a>
   <br>
-  <a href="https://zenodo.org/badge/latestdoi/153717996"><img src="https://zenodo.org/badge/153717996.svg" alt="DOI"></a>
+  <a href="https://zenodo.org/badge/latestdoi/158042832"><img src="https://zenodo.org/badge/158042832.svg" alt="DOI"></a>
   <br>
 </p>
 
