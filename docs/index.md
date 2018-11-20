@@ -10,19 +10,35 @@ The fast optimization transition of GSWITCH is based on a machine learning model
 The model can be resued by new applications, or be retrained to adapt to new architectures.
 In addition, GSWITCH provides succinct programming interface which hides all low-level tuning details. Developers can implements their graph applications with high performance in just ~100 lines of code.
 
+## Why GSWTICH
+
+As GPUs provide higher parallelism and memory bandwidth than traditional CPUs, GPUs become a promising hardware to accelerate graph algorithms. Many recent works have explored the potential of using GPUs for data-intensive graph processing. Although the primary optimizations of these works are diverse, we notice that most of them are trying to find a 'one size fits all' solution. This leads to the mismatch and complication issues:
+
+ **Mismatch**: Previous GPU-based graph frameworks may incur performance hits due to suboptimal strategies. Previous works accelerated graph primitives to run truly fast on some particular graphs or algorithms, however, their performance might fell dramatically when facing an unmatched situation. For example, Figure 2 shows that differents graph require different load-balance strategies. Figure 3 shows the performance loss if we only use push model in frontier expansion.
+
+![LB](./assets/imgs/motivation_LB.png)
+*Figure 1: Best load-balance for different graph*
+
+![loss](./assets/imgs/motivation_loss.png)
+*Figure 2: performance loss*
+
+ **Complication**: Priori knowledge is required for users to make favorable decisions, especially from a mass of choices. A bulk synchronous parallel (BSP)-style graph application achieves its best performance only if correct strategies are chosen in every super-step. Unfortunately, the number of these performance-crucial strategies is very large, or worse yet, various combinations of these strategies form a huge tuning space. Data analysts should not spend their labor on wrestling with the tedious and complex performance tuning. Offloading the decision-making to a fully auto-tuning runtime could be a better choice.
+
 ## Dependency
 
  - nvcc 7.5+
  - cmake
  - moderngpu
 
-## Quick Start
+## Build Instruction
+
+Clone GSWITCH code to local server and build GSWITCH with CMake.
 
 ```shell
-mkdir build
-cd build
-cmake ..
-make
+$ git clone https://github.com/PAA-NCIC/GSWITCH.git
+$ cd GSWITCH
+$ mkdir build && cd build
+$ cmake ../ && make -j8
 ```
 
 ## Usage
@@ -53,6 +69,47 @@ Here are the basic useages of pre-integrated applications (BFS, CC, PR, SSSP, BC
                        )
 [-j, --json=<string>]  set the json path (Default: 0)
 ```
+
+*Note: By using configs, you can force the applications to run with the static strategies. (No dynamic transition).
+
+## APIs
+
+To customize your own application. you should provide at most six small functions.
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>APIs</strong></th>
+      <th><strong>Description</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td width="52%"><code class="highlighter-rouge">filter(int vidx, G g)</code></td>
+      <td>required, stream all the vertices(or edges) and filter out active ones; then update their value.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">WA emit(int vidx, E* e, G g)</code></td>
+      <td>required, describe the message from one vertex to another.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">comp(WA* vdata, WA msg, G g)</code></td>
+      <td>required, describe how the message is processed in the target vertex.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">compAtomic(WA* vdata, WA msg, G g)</code></td>
+      <td>ditto, but an atomic version.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">cond(int vidx, E* e, G g)</code></td>
+      <td>optional, help to omit useless updates.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">exit(int vidx, E* e, G g)</code></td>
+      <td>optional, customed exit condition.</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Example
 
@@ -91,66 +148,17 @@ int main(){
 run the with `./BFS soc-orkut.mtx --with-header --src=0 --device=0 --verbose`:
 
 ![run-bfs](./assets/imgs/run-bfs-orkut-example.png)
-*Figure 1: BFS example*
+*Figure 3: BFS example*
 
 ![path](./assets/imgs/hit.png)
-*Figure 2: the decision path of BFS for graph orkut*
+*Figure 4: the decision path of BFS for graph orkut*
 
-
-## Why GSWTICH
-
-As GPUs provide higher parallelism and memory bandwidth than traditional CPUs, GPUs become a promising hardware to accelerate graph algorithms. Many recent works have explored the potential of using GPUs for data-intensive graph processing. Although the primary optimizations of these works are diverse, we notice that most of them are trying to find a 'one size fits all' solution. This leads to the mismatch and complication issues:
-
- **Mismatch**: Previous GPU-based graph frameworks may incur performance hits due to suboptimal strategies. Previous works accelerated graph primitives to run truly fast on some particular graphs or algorithms, however, their performance might fell dramatically when facing an unmatched situation. For example, Figure 2 shows that differents graph require different load-balance strategies. Figure 3 shows the performance loss if we only use push model in frontier expansion.
-
-![LB](./assets/imgs/motivation_LB.png)
-*Figure 3: Best load-balance for different graph*
-
-![loss](./assets/imgs/motivation_loss.png)
-*Figure 4: performance loss*
-
- **Complication**: Priori knowledge is required for users to make favorable decisions, especially from a mass of choices. A bulk synchronous parallel (BSP)-style graph application achieves its best performance only if correct strategies are chosen in every super-step. Unfortunately, the number of these performance-crucial strategies is very large, or worse yet, various combinations of these strategies form a huge tuning space. Data analysts should not spend their labor on wrestling with the tedious and complex performance tuning. Offloading the decision-making to a fully auto-tuning runtime could be a better choice.
-
-## APIs
-
-<table>
-  <thead>
-    <tr>
-      <th><strong>APIs</strong></th>
-      <th><strong>Description</strong></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td width="52%"><code class="highlighter-rouge">filter(int vidx, G g)</code></td>
-      <td>required, stream all the vertices(or edges) and filter out active ones; then update their value.</td>
-    </tr>
-    <tr>
-      <td><code class="highlighter-rouge">WA emit(int vidx, E* e, G g)</code></td>
-      <td>required, describe the message from one vertex to another.</td>
-    </tr>
-    <tr>
-      <td><code class="highlighter-rouge">comp(WA* vdata, WA msg, G g)</code></td>
-      <td>required, describe how the message is processed in the target vertex.</td>
-    </tr>
-    <tr>
-      <td><code class="highlighter-rouge">compAtomic(WA* vdata, WA msg, G g)</code></td>
-      <td>ditto, but an atomic version.</td>
-    </tr>
-    <tr>
-      <td><code class="highlighter-rouge">cond(int vidx, E* e, G g)</code></td>
-      <td>optional, help to omit useless updates.</td>
-    </tr>
-    <tr>
-      <td><code class="highlighter-rouge">exit(int vidx, E* e, G g)</code></td>
-      <td>optional, customed exit condition.</td>
-    </tr>
-  </tbody>
-</table>
 
 ## Applications
 
-Here we describe five typical graph applications in our framework: the Breadth-first search algorithm (BFS), the connected components algorithm (CC), the PageRank algorithm (PR), the single source shortest path algorithm (SSSP), and the betweenness centrality algorithm (BC). These five benchmarks can cover the majority of real-world graph applications.
+### typical applications
+
+Here we describe five typical graph applications in our framework to show how to translate real applications into our filter-expand framework: the Breadth-first search algorithm (BFS), the connected components algorithm (CC), the PageRank algorithm (PR), the single source shortest path algorithm (SSSP), and the betweenness centrality algorithm (BC). These five benchmarks can cover the majority of real-world graph applications.
 
 **Breadth-First Search**. A BFS algorithm generates the breadth-first search tree of a graph from a source vertex *root* and compute the shortest jump hops from the *root* to all vertices reachable from it. Both of each vertex and each edge will be processed at most once. In BFS, any race condition between edges visiting a vertex is benign, thus we can perform pruning when we find a vertex that has been touched in the current iteration. 
 
@@ -182,11 +190,14 @@ The algorithm is composed of two phases: a forward phase and a backward phase. T
 
 In GSWITCH, We also implement the forward and backward phases. In the forward phase, we use a `filter` function similar with BFS to choose the active vertices and use the emit function to send the number of the shortest paths to inactive vertices. The `comp` and `compAtomic` functions are used to sum the numbers of the shortest paths. In the backward phase. A `filter` function will choose and update the vertices according to the level computed in the forward phase. A `emit` function will send BC value to its neighbors, while the `comp` and `compAtomic` function do the sum work.
 
+### Extended applications
+
 Besides the above five application, we will constantly updated other applictions here:
 
 **Graph Coloring**. Graph coloring partitions the vertices of a graph such that no two adjacent vertices share the same color. In most of cases, applications relying on this algorithm do not require the optimal coloring, such as Pannotia. Doing such coloring is among the first steps in many parallel graph algorithms. In the initialization step, each vertex is labeled with a random integer value. The algorithm then launches multiple iterations, each responsible for labeling one color. For each vertex, the algorithm compares its vertex value with that of its neighboring vertices. If the vertex value of a given node happens to be the largest (or smallest) among its neighbors it marks itself with the current iteration colors (one each for the largest and smallest in each set). The algorithm terminates when all vertices are colored.
 
 We implement the GC algorithm as vertex-centric in GSWITCH. We use the `filter` function to filter out the uncolored vertices as our active set, then we color the vertice whose local maximum vertex id collected in the last iteration is smaller then it's own vertex id. The `emit` function is used to send vertex id to each vertex's neighbors. The `comp` and `compAtomic` compute the max vertex id of each vertex's neighbors. This naive implementation has many optimization such as multi-hash and min-max, which can make the algorithm converges faster.
+
 
 ## Performance
 
