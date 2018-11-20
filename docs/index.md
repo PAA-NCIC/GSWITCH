@@ -70,7 +70,7 @@ Here are the basic useages of pre-integrated applications (BFS, CC, PR, SSSP, BC
 [-j, --json=<string>]  set the json path (Default: 0)
 ```
 
-*Note: By using configs, you can force the applications to run with the static strategies. (No dynamic transition).
+*Note: By using `--configs`, you can force the applications to run with the static strategies. (No dynamic transition).
 
 ## APIs
 
@@ -156,7 +156,7 @@ run the with `./BFS soc-orkut.mtx --with-header --src=0 --device=0 --verbose`:
 
 ## Applications
 
-### typical applications
+### Typical applications
 
 Here we describe five typical graph applications in our framework to show how to translate real applications into our filter-expand framework: the Breadth-first search algorithm (BFS), the connected components algorithm (CC), the PageRank algorithm (PR), the single source shortest path algorithm (SSSP), and the betweenness centrality algorithm (BC). These five benchmarks can cover the majority of real-world graph applications.
 
