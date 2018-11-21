@@ -36,8 +36,7 @@ struct notification_t{
     cudaHostGetDevicePointer((void**)&dg_tag, (void*)h_tag, 0);
     cudaMallocHost((void**)&h_cnt, sizeof(int));
     cudaMalloc((void**)&dg_cnt, sizeof(int));
-    h_tag[0]=0;
-    already = false;
+    reset();
     return sizeof(bool);
   }
 

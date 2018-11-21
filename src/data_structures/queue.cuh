@@ -31,6 +31,7 @@ struct subqueue_t{
     H_ERR(cudaMalloc((void**)&dg_queue, sizeof(int)*size));
     H_ERR(cudaMalloc((void**)&dg_qsize, sizeof(int)));
     CLEAN(dg_queue, size);
+    CLEAN(dg_qsize, 1);
     gpu_bytes += sizeof(int)*size + sizeof(int);
     return  gpu_bytes;
   }

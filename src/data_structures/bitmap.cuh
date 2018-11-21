@@ -9,6 +9,7 @@ struct bits_t{
   int build(int nvertexs){
     n_words = (nvertexs + 8*sizeof(word_t)-1) >> sft;
     H_ERR(cudaMalloc((void**)&dg_bits, sizeof(word_t)*n_words));
+    reset();
     return sizeof(word_t)*n_words;
   }
 
