@@ -276,7 +276,7 @@ public:
       }
     }
 
-    if(!quiet) rinse();
+    if(!quiet && !with_weight) rinse();
 
     attr.fill(odegrees, nvertexs);
 
