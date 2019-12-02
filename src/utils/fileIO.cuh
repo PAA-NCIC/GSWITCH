@@ -138,15 +138,23 @@ public:
   }
 
   void gen_weight(int lim){
-    with_weight = true;
-    int64_t tot=0;
-    LOG(" -- generate edge weight 0~%d\n",lim);
-    for(int i = 0; i < nedges; i++){
-      E w = (E)rand_device<int>::rand_weight(lim);
-      tot += w;
-      evector.push_back(w);
+    if(with_weight && evector.size() > 0){
+      int64_t tot = 0;
+      for(size_t i=0; i<evector.size(); ++i){
+        tot += evector[i];
+      }
+      mean_weight = (tot+.0)/evector.size();
+    }else{
+      with_weight = true;
+      int64_t tot=0;
+      LOG(" -- generate edge weight 0~%d\n",lim);
+      for(int i = 0; i < nedges; i++){
+        E w = (E)rand_device<int>::rand_weight(lim);
+        tot += w;
+        evector.push_back(w);
+      }
+      mean_weight = (tot+.0)/nedges;
     }
-    mean_weight = (tot+.0)/nedges;
   }
 
   void reorder(){
