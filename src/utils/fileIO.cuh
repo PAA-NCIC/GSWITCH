@@ -296,7 +296,7 @@ public:
       std::cout << " -- degree range: " << attr.range << "; avg. degree " << attr.avg_deg << "; max degree " << attr.max_deg << std::endl;
       std::cout << " -- isdirected: " << (directed?"Yes":"No") << std::endl; 
       std::cout << " -- isweighted: " << (with_weight?"Yes":"No") << std::endl;
-      std::cout << "Host Graph memory used: " << (0.0+mem_used+2*sizeof(int)+2*sizeof(bool))/(1l<<30) << " Gb."<< std::endl;
+      std::cout << "Host Graph memory used: " << (0.0+mem_used+2*sizeof(int)+2*sizeof(bool))/(1l<<30) << " GB."<< std::endl;
     }
     if(ENABLE_2D_PARTITION){
       chunks.build(nvertexs, adj_list, start_pos, odegrees);
@@ -464,7 +464,7 @@ public:
       std::cout << " -- nvertexs: " << nvertexs << " nedges: " << nedges << std::endl;
       std::cout << " -- isdirected: " << (directed?"Yes":"No") << std::endl; 
       std::cout << " -- isweighted: " << (with_weight?"Yes":"No") << std::endl;
-      std::cout << "Host Graph memory used: " << (0.0+mem_used+2*sizeof(int)+2*sizeof(bool))/(1l<<30) << " Gb."<< std::endl;
+      std::cout << "Host Graph memory used: " << (0.0+mem_used+2*sizeof(int)+2*sizeof(bool))/(1l<<30) << " GB."<< std::endl;
     }
   }
 
