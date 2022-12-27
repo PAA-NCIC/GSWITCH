@@ -185,7 +185,7 @@ template<typename E>
 struct Fake<VC,E>{ 
   static graph_t<CSR,E> 
   func(std::string path, feature_t &fets, bool with_header=false, bool with_weight=false, bool directed=false){
-    int gpu_bytes = 0;
+    int64_t gpu_bytes = 0;
     graph_t<CSR,E> g;
     g.el.read_mtx(path,directed,with_weight,with_header);
     g.hg.build(g.el);
@@ -207,7 +207,7 @@ struct Fake<VC,E>{
     graph_t<CSR,E> g;
     g.el = el;
     g.hg.build(g.el);
-    int gpu_bytes = g.dg.build(g.hg);
+    int64_t gpu_bytes = g.dg.build(g.hg);
     fets.avg_deg = g.hg.attr.avg_deg;
     fets.std_deg = g.hg.attr.std_deg;
     fets.range   = g.hg.attr.range;
@@ -225,7 +225,7 @@ template<typename E>
 struct Fake<EC,E>{ 
   static graph_t<COO,E> 
   func(std::string path, feature_t &fets, bool with_header=false, bool with_weight=false, bool directed=false){
-    int gpu_bytes = 0;
+    int64_t gpu_bytes = 0;
     graph_t<COO,E> g;
     g.el.read_mtx(path,directed,with_weight,with_header);
     g.hg.build(g.el);
@@ -248,7 +248,7 @@ struct Fake<EC,E>{
     graph_t<COO,E> g;
     g.el = el;
     g.hg.build(g.el);
-    int gpu_bytes = g.dg.build(g.hg);
+    int64_t gpu_bytes = g.dg.build(g.hg);
     fets.avg_deg = g.hg.attr.avg_deg;
     fets.std_deg = g.hg.attr.std_deg;
     fets.range   = g.hg.attr.range;
