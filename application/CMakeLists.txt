@@ -1,6 +1,9 @@
 cuda_add_executable(BFS bfs.cu)
 target_link_libraries(BFS gswitch)
 
+cuda_add_executable(MBFS mbfs.cu)
+target_link_libraries(MBFS gswitch)
+
 cuda_add_executable(CC cc.cu)
 target_link_libraries(CC gswitch)
 

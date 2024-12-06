@@ -73,7 +73,13 @@ struct config_t {
     std::cout << "] ";
   }
 
-  void reset() {}
+  void reset() {
+    conf_first_round = true;
+    conf_switch_to_fusion = false;
+    conf_switch_to_standalone = false;
+    conf_fuse_inspect = false;
+    conf_idle = 0;
+  }
 
   __device__ __forceinline__ bool ignore_u_state() {
     return conf_ignore_u_state;
