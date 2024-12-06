@@ -31,6 +31,7 @@ template <typename E> struct device_graph_t<COO, E> {
   // WARNING,TODO: This update is only vaild in the top level
   //  since the primitives we have accept parameter by assignment
   inline void update_level(int inc = 1) { level += inc; }
+  inline void reset_level(int inc = 1) { level = 0; }
 
   int64_t nvertexs;
   int64_t nedges;
@@ -146,6 +147,7 @@ template <typename E> struct device_graph_t<CSR, E> {
   // WARNING,TODO: This update is only vaild in the top level
   //  since the primitives we have accept parameter by assignment
   __host__ __device__ inline void update_level(int inc = 1) { level += inc; }
+  __host__ __device__ inline void reset_level(int inc = 1) { level = 0; }
 
   chunk_t dg_chunks;
 
