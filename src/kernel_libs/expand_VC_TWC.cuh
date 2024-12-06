@@ -1,19 +1,19 @@
 #ifndef __expand_VC_TWC_CUH
 #define __expand_VC_TWC_CUH
 
-#include "utils/utils.cuh"
-#include "utils/intrinsics.cuh"
-#include "data_structures/graph.cuh"
+#include "abstraction/config.cuh"
 #include "data_structures/active_set.cuh"
 #include "data_structures/functor.cuh"
-#include "abstraction/config.cuh"
+#include "data_structures/graph.cuh"
+#include "utils/intrinsics.cuh"
+#include "utils/utils.cuh"
 
 // This optimization variant has been move to expand_VC_TM.cuh
 
-//__global__ void 
+//__global__ void
 //__expand_TWC(active_set_t as, graph_t g, int lvl, int mode){
-//  const index_t* __restrict__ strict_adj_list = g.dg_adj_list; 
-//  
+//  const index_t* __restrict__ strict_adj_list = g.dg_adj_list;
+//
 //  int STRIDE,gtid,phase,cosize,qsize;
 //  if(mode==0){
 //    STRIDE = blockDim.x*gridDim.x;
@@ -61,6 +61,5 @@
 //  }
 //  for(int i=0;i<3;i++) cudaStreamSynchronize(as.streams[i]);
 //}
-
 
 #endif

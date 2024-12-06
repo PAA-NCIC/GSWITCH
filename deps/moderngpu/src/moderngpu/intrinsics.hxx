@@ -152,7 +152,11 @@ MGPU_DEVICE type_t shfl_up(type_t x, int offset, int width = warp_size) {
   u.t = x;
 
   iterate<num_words>([&](int i) {
+#if (__CUDACC_VER_MAJOR__ >= 9)
+    u.x[i] = __shfl_up_sync(__activemask(), u.x[i], offset, width);
+#else
     u.x[i] = __shfl_up(u.x[i], offset, width);
+#endif
   });
   return u.t;
 }
@@ -167,7 +171,11 @@ MGPU_DEVICE type_t shfl_down(type_t x, int offset, int width = warp_size) {
   u.t = x;
 
   iterate<num_words>([&](int i) {
+#if (__CUDACC_VER_MAJOR__ >= 9)
+    u.x[i] = __shfl_up_sync(__activemask(), u.x[i], offset, width);
+#else
     u.x[i] = __shfl_down(u.x[i], offset, width);
+#endif
   });
   return u.t;
 }
@@ -197,13 +205,14 @@ MGPU_DEVICE inline c_type shfl_##dir##_op(c_type x, int offset, \
   c_op<c_type> op, int width = warp_size) { \
   c_type result = c_type(); \
   int mask = (warp_size - width)<< 8 | (is_up ? 0 : (width - 1)); \
+  int threadmask = __activemask(); \
   asm( \
     "{.reg ."#ptx_type" r0;" \
     ".reg .pred p;" \
-    "shfl."#dir".b32 r0|p, %1, %2, %3;" \
-    "@p "#ptx_op"."#ptx_type" r0, r0, %4;" \
+    "shfl.sync."#dir".b32 r0|p, %1, %2, %3, %4;" \
+    "@p "#ptx_op"."#ptx_type" r0, r0, %5;" \
     "mov."#ptx_type" %0, r0; }" \
-    : "="#r(result) : #r(x), "r"(offset), "r"(mask), #r(x)); \
+    : "="#r(result) : #r(x), "r"(offset), "r"(mask), "r"(threadmask), #r(x)); \
   return result; \
 }
 
@@ -235,18 +244,19 @@ MGPU_DEVICE inline c_type shfl_##dir##_op(c_type x, int offset, \
   c_op<c_type> op, int width = warp_size) { \
   c_type result = c_type(); \
   int mask = (warp_size - width)<< 8 | (is_up ? 0 : (width - 1)); \
+  int threadmask = __activemask(); \
   asm( \
     "{.reg ."#ptx_type" r0;" \
     ".reg .u32 lo;" \
     ".reg .u32 hi;" \
     ".reg .pred p;" \
     "mov.b64 {lo, hi}, %1;" \
-    "shfl."#dir".b32 lo|p, lo, %2, %3;" \
-    "shfl."#dir".b32 hi  , hi, %2, %3;" \
+    "shfl.sync."#dir".b32 lo|p, lo, %2, %3, %4;" \
+    "shfl.sync."#dir".b32 hi  , hi, %2, %3, %4;" \
     "mov.b64 r0, {lo, hi};" \
-    "@p "#ptx_op"."#ptx_type" r0, r0, %4;" \
+    "@p "#ptx_op"."#ptx_type" r0, r0, %5;" \
     "mov."#ptx_type" %0, r0; }" \
-    : "="#r(result) : #r(x), "r"(offset), "r"(mask), #r(x) \
+    : "="#r(result) : #r(x), "r"(offset), "r"(mask), "r"(threadmask), #r(x) \
   ); \
   return result; \
 }
