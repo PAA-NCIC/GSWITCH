@@ -17,12 +17,6 @@ __global__ void __expand_VC_WM_fused_wtf(active_set_t as, G g, F f,
   // used for local storage
   __shared__ int tmp[3 * THDNUM_EXPAND];
 
-  // used for kernel fusion
-  __shared__ Block_Scan<int, 10>::Temp_Space scan_space;
-  __shared__ int output_cache[THDNUM_EXPAND << LOG_PER_OUT];
-  const int OFFSET_ouput = threadIdx.x << LOG_PER_OUT;
-  int thread_output = 0;
-
   const int assize = ASProxy<fmt, M>::get_size_hard(as);
   const int STRIDE = blockDim.x * gridDim.x;
   const int gtid = threadIdx.x + blockIdx.x * blockDim.x;
@@ -123,22 +117,10 @@ __global__ void __expand_VC_WM_fused_wtf(active_set_t as, G g, F f,
       // if u is updated successfully, write u to the queue directly.
       // cache mode.
       if (toprocess) {
-        if (thread_output < PER_OUT)
-          output_cache[OFFSET_ouput + (thread_output++)] = u;
-        else {
-          __direct_write<M>(output_cache + OFFSET_ouput, as.queue);
-          thread_output = 0;
-          output_cache[OFFSET_ouput + (thread_output++)] = u;
-        }
+        Qproxy<M>::push(as.queue, u);
       }
     } // for 32 edges
-    if (_any(thread_output == PER_OUT))
-      __write_global_queue_warp<M>(scan_space, output_cache, thread_output,
-                                   as.queue);
   } // for all the elements in the active set.
-  if (_any(thread_output > 0))
-    __write_global_queue_warp<M>(scan_space, output_cache, thread_output,
-                                 as.queue);
 }
 
 template <ASFmt fmt, QueueMode M, typename G, typename F>
@@ -147,12 +129,6 @@ __global__ void __expand_VC_WM_fused(active_set_t as, G g, F f, config_t conf) {
 
   // used for local storage
   __shared__ int tmp[3 * THDNUM_EXPAND];
-
-  // used for kernel fusion
-  __shared__ Block_Scan<int, 10>::Temp_Space scan_space;
-  __shared__ int output_cache[THDNUM_EXPAND << LOG_PER_OUT];
-  const int OFFSET_ouput = threadIdx.x << LOG_PER_OUT;
-  int thread_output = 0;
 
   const int assize = ASProxy<fmt, M>::get_size_hard(as);
   const int STRIDE = blockDim.x * gridDim.x;
@@ -249,22 +225,10 @@ __global__ void __expand_VC_WM_fused(active_set_t as, G g, F f, config_t conf) {
       // if u is updated successfully, write u to the queue directly.
       // cache mode.
       if (toprocess) {
-        if (thread_output < PER_OUT)
-          output_cache[OFFSET_ouput + (thread_output++)] = u;
-        else {
-          __direct_write<M>(output_cache + OFFSET_ouput, as.queue);
-          thread_output = 0;
-          output_cache[OFFSET_ouput + (thread_output++)] = u;
-        }
+        Qproxy<M>::push(as.queue, u);
       }
     } // for 32 edges
-    if (_any(thread_output == PER_OUT))
-      __write_global_queue_warp<M>(scan_space, output_cache, thread_output,
-                                   as.queue);
   } // for all the elements in the active set.
-  if (_any(thread_output > 0))
-    __write_global_queue_warp<M>(scan_space, output_cache, thread_output,
-                                 as.queue);
 }
 
 template <ASFmt fmt, QueueMode M, typename G, typename F>
@@ -489,11 +453,12 @@ template <> struct ExpandProxy<VC, WM, Push> {
                      config_t conf) {
     if (conf.conf_fuse_inspect) {
       if (conf.conf_pruning && conf.conf_asfmt == Queue &&
-          as.queue.mode == Normal && conf.conf_toall == false)
+          as.queue.mode == Normal && conf.conf_toall == false) {
         __expand_VC_WM_fused_wtf<Queue, Normal>
             <<<conf.ctanum, conf.thdnum>>>(as, g, f, conf);
-      else
+      } else {
         Launch_Expand_VC(WM_fused, as, g, f, conf);
+      }
     } else {
       Launch_Expand_VC(WM, as, g, f, conf);
     }

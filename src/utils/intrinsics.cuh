@@ -3,74 +3,56 @@
 
 #include <cuda.h>
 
-#define WARPSIZE 32
-
 template <typename T>
-__device__ static __forceinline__ T _shfl_up(T var, unsigned int delta,
-                                             int width = WARPSIZE) {
+__device__ static __forceinline__ T _shfl_up(T var, unsigned int delta) {
 #if (__CUDACC_VER_MAJOR__ >= 9)
-  unsigned mask = __activemask();
-  var = __shfl_up_sync(mask, var, delta, width);
+  return __shfl_up_sync(__activemask(), var, delta);
 #else
-  var = __shfl_up(var, delta, width);
+  return __shfl_up(var, delta);
 #endif
-  return var;
 }
 
 template <typename T>
-__device__ static __forceinline__ T _shfl_down(T var, unsigned int delta,
-                                               int width = WARPSIZE) {
+__device__ static __forceinline__ T _shfl_down(T var, unsigned int delta) {
 #if (__CUDACC_VER_MAJOR__ >= 9)
-  unsigned mask = __activemask();
-  var = __shfl_down_sync(mask, var, delta, width);
+  return __shfl_down_sync(__activemask(), var, delta);
 #else
-  var = __shfl_down(var, delta, width);
+  return __shfl_down(var, delta);
 #endif
-  return var;
 }
 
 template <typename T>
-__device__ static __forceinline__ T _shfl(T var, unsigned int src_line,
-                                          int width = WARPSIZE) {
+__device__ static __forceinline__ T _shfl(T var, int src_line) {
 #if (__CUDACC_VER_MAJOR__ >= 9)
-  unsigned mask = __activemask();
-  var = __shfl_sync(mask, var, src_line, width);
+  return __shfl_sync(__activemask(), var, src_line);
 #else
-  var = __shfl(var, src_line, width);
+  return __shfl(__activemask(), src_line);
 #endif
-  return var;
 }
 
 template <typename T>
-__device__ static __forceinline__ T _shfl_xor(T var, unsigned int delta,
-                                              int width = WARPSIZE) {
+__device__ static __forceinline__ T _shfl_xor(T var, int lane_mask) {
 #if (__CUDACC_VER_MAJOR__ >= 9)
-  unsigned mask = __activemask();
-  var = __shfl_xor_sync(mask, var, delta, width);
+  return __shfl_xor_sync(__activemask(), var, lane_mask);
 #else
-  var = __shfl_xor(var, delta, width);
+  return __shfl_xor(var, lane_mask);
 #endif
-  return var;
 }
 
-template <typename T> __device__ static __forceinline__ T _ballot(T predicate) {
+__device__ static __forceinline__ unsigned _ballot(int predicate) {
 #if (__CUDACC_VER_MAJOR__ >= 9)
-  unsigned mask = __activemask();
-  predicate = __ballot_sync(mask, predicate);
+  return __ballot_sync(__activemask(), predicate);
 #else
-  predicate = __ballot(predicate);
+  return __ballot(predicate);
 #endif
-  return predicate;
 }
 
-template <typename T> __device__ static __forceinline__ T _any(T predicate) {
+__device__ static __forceinline__ int _any(int predicate) {
 #if (__CUDACC_VER_MAJOR__ >= 9)
-  unsigned mask = __activemask();
-  predicate = __any_sync(mask, predicate);
+  return __any_sync(__activemask(), predicate);
 #else
-  predicate = __any(predicate);
+  return __any(predicate);
 #endif
-  return predicate;
 }
 
 #include "utils/block_scan.cuh"
@@ -123,7 +105,7 @@ __device__ int alignment(int arbitrary, int base) {
 __device__ int lanemask_lt() { return (1 << (threadIdx.x & 31)) - 1; }
 
 __device__ int atomicAggInc(int *ctr) {
-  unsigned int active = __activemask();
+  unsigned int active = _ballot(1);
   int leader = __ffs(active) - 1;
   int change = __popc(active);
   unsigned int rank = __popc(active & lanemask_lt());
