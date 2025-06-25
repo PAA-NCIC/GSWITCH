@@ -302,8 +302,11 @@ public:
       }
     }
 
-    if (!quiet && !with_weight)
+    if (!quiet && !with_weight) {
       rinse();
+    }
+
+    // CSR_pretty_print();
 
     attr.fill(odegrees, nvertexs);
 
@@ -396,50 +399,114 @@ public:
     return root;
   }
 
-  void rinse() {
-    int t = 0;
-    for (int v = 0; v < nvertexs; ++v) {
-      int s = start_pos[v];
-      start_pos[v] = t;
-      int e = (v == (nvertexs - 1) ? nedges : start_pos[v + 1]);
-      std::sort(adj_list + s, adj_list + e);
+  void dedup_edges() {
+    auto dedup_fn = [this](int &idx, int v, int *_adj_list, int *_start_pos,
+                           int *_odegrees) {
+      int s = _start_pos[v];
+      _start_pos[v] = idx;
+      int e = (v == (this->nvertexs - 1) ? this->nedges : _start_pos[v + 1]);
+      std::sort(_adj_list + s, _adj_list + e);
       for (int j = s; j < e; ++j) {
-        int u = adj_list[j];
-        if (j > s && u == adj_list[j - 1])
+        int u = _adj_list[j];
+        // skip duplicated edges
+        if (j > s && u == _adj_list[j - 1]) {
           continue;
-        adj_list[t++] = u;
+        }
+        _adj_list[idx++] = u;
       }
-      odegrees[v] = t - start_pos[v];
+      _odegrees[v] = idx - _start_pos[v];
+    };
+    int t = 0, tr = 0;
+    for (int v = 0; v < nvertexs; ++v) {
+      dedup_fn(t, v, adj_list, start_pos, odegrees);
+      if (this->directed) {
+        dedup_fn(tr, v, r_adj_list, r_start_pos, r_odegrees);
+      }
     }
     LOG(" -- remove duplicate edges: %d -> %d\n", nedges, t);
-    nedges = t;
+    if (this->directed && t != tr) {
+      printf("Inconsistent nedges in directed graphs.");
+    }
+    this->nedges = t;
+  }
+
+  void remove_solo_vertices() {
     std::vector<int> rename;
     int top = 0;
     for (int i = 0; i < nvertexs; ++i) {
-      if (odegrees[i] == 0)
+      bool solo = (odegrees[i] == 0);
+      bool r_solo = !this->directed || (r_odegrees[i] == 0);
+      if (solo && r_solo) {
         rename.push_back(-1);
-      else
+      } else {
         rename.push_back(top++);
-    }
-    t = 0;
-    for (int v = 0; v < nvertexs; ++v) {
-      int s = start_pos[v];
-      int e = (v == (nvertexs - 1) ? nedges : start_pos[v + 1]);
-      if (s == e)
-        continue;
-      start_pos[t] = start_pos[v];
-      odegrees[t] = odegrees[v];
-      for (int j = s; j < e; ++j) {
-        adj_list[j] = rename[adj_list[j]];
-        if (adj_list[j] == -1)
-          printf("Error in file CSR transform.");
       }
-      t++;
     }
-    if (top != t)
-      printf("Error in file CSR transform.");
+
+    auto remove_solo_fn = [this, rename](int &idx, int v, int *_adj_list,
+                                         int *_start_pos, int *_odegrees) {
+      if (rename[v] == -1) {
+        return;
+      }
+      _start_pos[idx] = _start_pos[v];
+      _odegrees[idx] = _odegrees[v];
+      int s = _start_pos[v];
+      int e = (v == (this->nvertexs - 1) ? this->nedges : _start_pos[v + 1]);
+      for (int j = s; j < e; ++j) {
+        _adj_list[j] = rename[_adj_list[j]];
+      }
+      idx++;
+    };
+
+    int t = 0, tr = 0;
+    for (int v = 0; v < nvertexs; ++v) {
+      remove_solo_fn(t, v, adj_list, start_pos, odegrees);
+      if (this->directed) {
+        remove_solo_fn(tr, v, r_adj_list, r_start_pos, r_odegrees);
+      }
+    }
+
+    if (top != t || (this->directed && t != tr)) {
+      printf("Error in file CSR transform top=%d, t=%d, tr=%d.\n", top, t, tr);
+    }
     LOG(" -- remove solo vertices: %d -> %d\n", nvertexs, top);
     nvertexs = top;
+  }
+
+  void rinse() {
+    // with_weight
+    if (with_weight) {
+      printf("skip edgelist rinsing for weighted graph.");
+      return;
+    }
+    dedup_edges();
+    remove_solo_vertices();
+  }
+
+  void CSR_pretty_print() {
+    printf("--------- DEBUG ----------\n");
+    printf("nvertex = %d, nedges = %d\n", this->nvertexs, this->nedges);
+    auto pretty_print_fn = [](int v, int *_adj_list, int *_start_pos,
+                              int *_odegrees) {
+      printf("d(%d)=%d, N(%d) = [ ", v, _odegrees[v], v);
+      for (int j = _start_pos[v]; j < _start_pos[v] + _odegrees[v]; ++j) {
+        int u = _adj_list[j];
+        char sepchar = (j == _start_pos[v] + _odegrees[v] - 1) ? ' ' : ',';
+        printf("%d%c", u, sepchar);
+      }
+      printf("]\n");
+    };
+
+    printf("--------- adj_list ----------\n");
+    for (int v = 0; v < this->nvertexs; v++) {
+      pretty_print_fn(v, adj_list, start_pos, odegrees);
+    }
+    if (this->directed) {
+      printf("-------- r_adj_list ---------\n");
+      for (int v = 0; v < this->nvertexs; v++) {
+        pretty_print_fn(v, r_adj_list, r_start_pos, r_odegrees);
+      }
+    }
   }
 
 public:
